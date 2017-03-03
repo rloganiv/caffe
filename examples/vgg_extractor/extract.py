@@ -2,7 +2,6 @@
 import argparse
 import caffe
 import numpy as np
-import os
 from PIL import Image
 import random
 import tarfile
@@ -17,9 +16,26 @@ MEAN_PIXEL = np.array([103.939, 116.779, 123.68], dtype=np.float32)
 
 # CLI arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('-f', '--file', help='file to process')
+parser.add_argument('-i', '--input', help='file to process')
 parser.add_argument('-o', '--output', help='output data')
 args = parser.parse_args()
+
+
+def process_tarf(tarf, net):
+    for member in tarf.getmembers():
+        file_name = member.name
+        file_id = file_name.split('.')[0]
+        file_id = file_id.replace('/', '-')
+        file_id += '_frame_1'
+        file_type = file_name.split('.')[-1]
+        if file_type == 'jpg':
+            img_file = tarf.extractfile(member)
+            img = preprocess_img(img_file)
+            feats = extract_vgg(img, net).flatten()
+            feat_str = ', '.join(map(str, feats))
+            yield file_id + ', ' + feat_str + '\n'
+        else:
+            continue
 
 
 def preprocess_img(img_file):
@@ -45,7 +61,16 @@ def preprocess_img(img_file):
     return arr
 
 
-def extract_vgg(net, img):
+def extract_vgg(img, net):
+    """Extract VGG features from image
+
+    Args:
+        img - Preprocessed image array.
+        net - VGG net.
+
+    Returns:
+        Extracted fc7 features.
+    """
     net.blobs['data'].reshape(1, 3, OUT_DIM[0], OUT_DIM[1])
     net.blobs['data'].data[...] = img
     net.forward()
@@ -60,9 +85,9 @@ if __name__ == '__main__':
     net = caffe.Net('VGG_ILSVRC_16_layers_deploy.prototxt',
                     'VGG_ILSVRC_16_layers.caffemodel',
                     caffe.TEST)
-    print net.blobs['data'].data.shape
-
-    with open('dog.jpg', 'r') as img_file:
-        img = preprocess_img(img_file)
-    print extract_vgg(net, img).shape
+    # Process file
+    # TODO: Add filetype handling
+    with tarfile.open(args.input) as tarf:
+        with open(args.output, 'w') as outfile:
+            outfile.writelines(process_tarf(tarf, net))
 
