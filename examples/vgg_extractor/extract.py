@@ -4,6 +4,7 @@ import caffe
 import numpy as np
 from PIL import Image
 import random
+import skvideo.io
 import tarfile
 
 import pdb
@@ -12,7 +13,7 @@ import pdb
 # Constants
 RESIZE_DIM = (256, 256)
 OUT_DIM = (224, 224)
-MEAN_PIXEL = np.array([103.939, 116.779, 123.68], dtype=np.float32)
+MEAN_PIXEL = np.array([123.68, 116.779, 103.939], dtype=np.float32)
 
 # CLI arguments
 parser = argparse.ArgumentParser()
@@ -21,34 +22,50 @@ parser.add_argument('-o', '--output', help='output data')
 args = parser.parse_args()
 
 
+def extract_frames(fname):
+    vreader = skvideo.io.vreader(fname)
+    for i, frame in enumerate(vreader):
+        if (i % 10) == 0:
+            yield Image.fromarray(frame)
+
+
 def process_tarf(tarf, net):
     for member in tarf.getmembers():
         file_name = member.name
         file_id = file_name.split('.')[0]
         file_id = file_id.replace('/', '-')
-        file_id += '_frame_1'
         file_type = file_name.split('.')[-1]
         if file_type == 'jpg':
             img_file = tarf.extractfile(member)
-            img = preprocess_img(img_file)
-            feats = extract_vgg(img, net).flatten()
+            img = PIL.open(img_file)
+            arr = preprocess_img(img)
+            feats = extract_vgg(arr, net).flatten()
             feat_str = ', '.join(map(str, feats))
-            yield file_id + ', ' + feat_str + '\n'
+            yield file_id + '_frame_1, ' + feat_str + '\n'
+        if file_type == 'avi':
+            # Temporarily extract video
+            avi_file = tarf.extractfile(member)
+            with open('tmp/vid.avi', 'wb') as f:
+                f.writelines(avi_file.readlines())
+            for frame_id, img in enumerate(extract_frames('tmp/vid.avi')):
+                arr = preprocess_img(img)
+                feats = extract_vgg(arr, net).flatten()
+                feat_str = ', '.join(map(str, feats))
+                yield '%s_frame_%i, %s \n' % (file_id, frame_id, feat_str)
         else:
             continue
 
 
-def preprocess_img(img_file):
+def preprocess_img(img):
     """Resize and randomly crop image
     
     Args:
-        img - An image file.
+        img - PIL.Image object
 
     Returns:
-        processed image data.
+        np.array containing processed image data.
     """
-    # Open and resize image
-    img = Image.open(img_file)
+    # resize image
     img = img.resize(RESIZE_DIM)
     # Random crop
     x = random.randint(0, RESIZE_DIM[0] - OUT_DIM[0])
@@ -58,6 +75,7 @@ def preprocess_img(img_file):
     arr = np.array(img.convert("RGB"), dtype=np.float32)
     arr -= MEAN_PIXEL
     arr = arr.transpose((2,0,1))
+    arr = arr[[2, 1, 0], :, :]
     return arr
 
 
