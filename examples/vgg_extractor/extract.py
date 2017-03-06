@@ -23,10 +23,13 @@ args = parser.parse_args()
 
 
 def extract_frames(fname):
-    vreader = skvideo.io.vreader(fname)
-    for i, frame in enumerate(vreader):
-        if (i % 10) == 0:
-            yield Image.fromarray(frame)
+    try:
+        vreader = skvideo.io.vreader(fname)
+        for i, frame in enumerate(vreader):
+            if (i % 10) == 0:
+                yield Image.fromarray(frame)
+    except:
+        print "EXCEPTION!!!"
 
 
 def process_tarf(tarf, net):
@@ -34,6 +37,7 @@ def process_tarf(tarf, net):
         file_name = member.name
         file_id = file_name.split('.')[0]
         file_id = file_id.replace('/', '-')
+        print file_id
         file_type = file_name.split('.')[-1]
         if file_type == 'jpg':
             img_file = tarf.extractfile(member)
