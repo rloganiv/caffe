@@ -16,7 +16,7 @@ layer {
   }
   embed_param {
     bias_term: false
-    input_dim: 92701  # = vocab_size + 1 (for EOS)
+    input_dim: 72701  # = vocab_size + 1 (for EOS)
     num_output: 300
     weight_filler {
       type: "uniform"
@@ -74,7 +74,7 @@ layer {
     decay_mult: 0
   }
   inner_product_param {
-    num_output: 92701  # = vocab_size + 1 (+1 for EOS)
+    num_output: 72701  # = vocab_size + 1 (+1 for EOS)
     weight_filler {
       type: "uniform"
       min: -0.08

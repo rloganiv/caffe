@@ -103,11 +103,11 @@ class DataGenerator(object):
 
         self.save_to_hdf5(cont_sentence, input_sentence, target_sentence)
 
-SENTS_FILENAME= './sents.txt'				# Directory path to the sentences file, CHANGE THIS TO MATCH FILENAME
-VOCAB_FILENAME = './examples/language_fusion/vocabulary_72k_surf_intersect_glove.txt' # Directory path to the vocab file
-OUTPUT_DIRECTORY='./hdf5'				# Directory containing our hdf5 files
-OUTPUT_FILENAME='data{0}.h5'			# Name of our hdf5 file(s)
-HDF5_TEXTFILE='hdf5_list.txt'				# Txt file listing our hdf5 files
+SENTS_FILENAME= '../Reddit_data_sentences.txt' # Directory path to the sentences file, CHANGE THIS TO MATCH FILENAME
+VOCAB_FILENAME = '../language_fusion/vocabulary_72k_surf_intersect_glove.txt' # Directory path to the vocab file
+OUTPUT_DIRECTORY='hdf5' # Directory containing our hdf5 files
+OUTPUT_FILENAME='data{0}.h5' # Name of our hdf5 file(s)
+HDF5_TEXTFILE='hdf5_list.txt' # Txt file listing our hdf5 files
 UNK_IDENTIFIER = 'unk'
 if __name__=="__main__":
     dg = DataGenerator()

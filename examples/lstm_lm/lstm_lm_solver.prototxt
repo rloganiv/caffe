@@ -1,4 +1,4 @@
-net: "./examples/lstm_lm/lstm_lm.prototxt"
+net: "lstm_lm.prototxt"
 train_state: { stage: 'embed-drop' stage: 'lstm-drop' }
 base_lr: 0.1
 lr_policy: "step"
@@ -9,7 +9,7 @@ max_iter: 110000
 momentum: 0.9
 weight_decay: 0.0000
 snapshot: 1000
-snapshot_prefix: "./examples/lstm_lm/snapshots/snapshot"
+snapshot_prefix: "snapshots/snapshot"
 solver_mode: CPU
 random_seed: 1701
 average_loss: 100
