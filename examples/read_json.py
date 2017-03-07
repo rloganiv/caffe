@@ -9,8 +9,8 @@ import string
 f=open('Reddit_data_sentences.txt','w')
 tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
 
-for file in os.listdir(sys.argv[0]):
-	filepath=sys.argv[0]+file
+for file in os.listdir(sys.argv[1]):
+	filepath=sys.argv[1]+file
 	contents=bz2.BZ2File(filepath, "r")
 	for sent_read in contents:
 		data = json.loads(sent_read)
