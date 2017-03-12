@@ -253,13 +253,17 @@ class fc7FrameSequenceGenerator(SequenceGenerator):
 
 BUFFER_SIZE = 16 # TEXT streams
 BATCH_STREAM_LENGTH = 1000
-SETTING = '/z/vsub/ytSequence' # in /z
+# SETTING = '/z/vsub/ytSequence' # in /z
+SETTING = 'home/ubuntu/data'
 OUTPUT_DIR = '{0}/hdf5/buffer_{1}_bwd_s2vt_{2}'.format(SETTING, BUFFER_SIZE, MAX_WORDS)
 # OUTPUT_DIR = '{0}/hdf5/buffer_{1}_s2vt_{2}'.format(SETTING, BUFFER_SIZE, MAX_WORDS)
-VOCAB = '/home/sv/vocabs/surf_intersect_glove.txt'
+# VOCAB = '/home/sv/vocabs/surf_intersect_glove.txt'
+VOCAB = '/home/ubuntu/caffe/examples/language_fusion/vocabulary_72k_surf_intersect_glove.txt'
 OUTPUT_DIR_PATTERN = '%s/%%s_batches' % OUTPUT_DIR
-FRAMEFEAT_FILE_PATTERN = '/home/sv/youtube/splits/yt_allframes_vgg_fc7_{0}.txt'
-SENTS_FILE_PATTERN = '/home/sv/youtube/splits/sents_{0}_lc_nopunc.txt'
+# FRAMEFEAT_FILE_PATTERN = '/home/sv/youtube/splits/yt_allframes_vgg_fc7_{0}.txt'
+FRAMEFEAT_FILE_PATTERN = '/home/ubuntu/data/msrvdc/msrvdc_vgg_fc7_{0}.txt'
+# SENTS_FILE_PATTERN = '/home/sv/youtube/splits/sents_{0}_lc_nopunc.txt'
+SENTS_FILE_PATTERN = '/home/ubuntu/data/msrvdc/msrvdc_sents_{0}.txt'
 
 def preprocess_dataset(split_name, data_split_name, batch_stream_length,
                       aligned=False, reverse=False):
