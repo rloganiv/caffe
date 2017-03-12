@@ -254,7 +254,7 @@ class fc7FrameSequenceGenerator(SequenceGenerator):
 BUFFER_SIZE = 16 # TEXT streams
 BATCH_STREAM_LENGTH = 1000
 # SETTING = '/z/vsub/ytSequence' # in /z
-SETTING = 'home/ubuntu/data'
+SETTING = '/home/ubuntu/data'
 OUTPUT_DIR = '{0}/hdf5/buffer_{1}_bwd_s2vt_{2}'.format(SETTING, BUFFER_SIZE, MAX_WORDS)
 # OUTPUT_DIR = '{0}/hdf5/buffer_{1}_s2vt_{2}'.format(SETTING, BUFFER_SIZE, MAX_WORDS)
 # VOCAB = '/home/sv/vocabs/surf_intersect_glove.txt'
