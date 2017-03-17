@@ -21,7 +21,7 @@ target_net = solver.net
 # Transfer glove embedding layer
 layer='embedding_input'
 source_layer = source_net.params[layer][0].data
-pdb.set_trace()
+
 assert source_layer.shape == target_net.params[layer][0].data.shape		# Check transferring layers is allowed
 target_net.params[layer][0].data[...] = source_layer
 

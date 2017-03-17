@@ -7,7 +7,7 @@ layer {
   top: "target_sentence"
   include { phase: TRAIN }
   hdf5_data_param {
-    source: "hdf5/hdf5_list.txt"
+    source: "/home/ubuntu/reddit-data/2006/hdf5_list.txt"
     batch_size: 20
   }
 }
