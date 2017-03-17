@@ -24,8 +24,9 @@ for file in os.listdir(sys.argv[1]):
 			for sentence in sentence_list:
 				if sentence.isspace():
 					continue
-				for ch in ['(',')','[',']','{','}','\'','\"','\n','\r']:
-					sentence=sentence.replace(ch,'')
+				sentence=re.sub(r'[(){}\[\]\'\"\r\n]','',sentence)
+				#for ch in ['(',')','[',']','{','}','\'','\"','\n','\r']:
+				#	sentence=sentence.replace(ch,'')
 				sentence=(sentence.lower()).rstrip('?:!.,;')
 				if sentence.isspace():
 					continue
