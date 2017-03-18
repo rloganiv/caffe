@@ -8,7 +8,7 @@ caffe.set_mode_gpu()
 
 # Load source network
 model = '../lstm_lm/lstm_lm.deploy.prototxt'
-weights = '../lstm_lm/snapshots/snapshot_iter_1000.caffemodel'	# Change to match snapshot
+weights = '/home/ubuntu/data/weights/lstm_2011/snapshot_iter_2.caffemodel'	# Change to match snapshot
 source_net = caffe.Net(model, weights, caffe.TEST)
 
 # Load target network

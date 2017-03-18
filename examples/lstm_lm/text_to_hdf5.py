@@ -30,7 +30,7 @@ class DataGenerator(object):
                 self.vocab[word] = len(self.vocab_inverted)
                 self.vocab_inverted.append(word)
 
-    def save_to_hdf5(self, cont_sentence, input_sentence, target_sentence):
+    def save_to_hdf5(self, cont_sentence, input_sentence, target_sentence, index):
         if not(os.path.exists(OUTPUT_DIRECTORY)):
             os.makedirs(OUTPUT_DIRECTORY)
 
@@ -48,10 +48,9 @@ class DataGenerator(object):
 
         with open(OUTPUT_DIRECTORY+'/'+HDF5_TEXTFILE, 'w') as f:
             while(i*file_size < num_data):
-                path_from_caffe = './examples/lstm_lm/hdf5' 
-                f.write(path_from_caffe+ '/' + OUTPUT_FILENAME.format(i)+'\n')
+                f.write(OUTPUT_DIRECTORY + '/' + OUTPUT_FILENAME.format(i, index)+'\n')
 
-                h5f = h5py.File(OUTPUT_DIRECTORY+ '/' + OUTPUT_FILENAME.format(i), 'w')
+                h5f = h5py.File(OUTPUT_DIRECTORY+ '/' + OUTPUT_FILENAME.format(i, index), 'w')
                 low_inds = i * file_size
                 high_inds = min((i+1)*file_size, num_data)
                
@@ -81,8 +80,8 @@ class DataGenerator(object):
         input_sentence = []
         target_sentence = []
 
-        with open(sents_filename, 'r') as sents_file:
-            for line in sents_file:
+        with open(sents_filename, 'a') as sents_file:
+            for index, line in enumerate(sents_file):
                 stream = self.line_to_stream(line)
                 pad = self.max_words - (len(stream) + 1)        # +1 is for the extra EOS character
                 if pad < 0:
@@ -99,14 +98,20 @@ class DataGenerator(object):
                 cont_sentence.append(cont_sent)
                 input_sentence.append(input_sent)
                 target_sentence.append(target_sent)
+		
+                if (index % 500000) == 0:
+                    self.save_to_hdf5(cont_sentence, input_sentence, target_sentence, index)
+                    cont_sentence = []
+                    input_sentence = []
+                    target_sentence = []
+
+        self.save_to_hdf5(cont_sentence, input_sentence, target_sentence, index)
 
 
-        self.save_to_hdf5(cont_sentence, input_sentence, target_sentence)
-
-SENTS_FILENAME= '../Reddit_data_sentences.txt' # Directory path to the sentences file, CHANGE THIS TO MATCH FILENAME
-VOCAB_FILENAME = '../language_fusion/vocabulary_72k_surf_intersect_glove.txt' # Directory path to the vocab file
-OUTPUT_DIRECTORY='hdf5' # Directory containing our hdf5 files
-OUTPUT_FILENAME='data{0}.h5' # Name of our hdf5 file(s)
+#SENTS_FILENAME= '../Reddit_data_sentences.txt' # Directory path to the sentences file, CHANGE THIS TO MATCH FILENAME
+VOCAB_FILENAME = '/home/ubuntu/data/vocabulary_72k_surf_intersect_glove.txt' # Directory path to the vocab file
+OUTPUT_DIRECTORY='/home/ubuntu/reddit-data/all' # Directory containing our hdf5 files
+OUTPUT_FILENAME='data{0}_{1}.h5' # Name of our hdf5 file(s)
 HDF5_TEXTFILE='hdf5_list.txt' # Txt file listing our hdf5 files
 UNK_IDENTIFIER = 'unk'
 if __name__=="__main__":

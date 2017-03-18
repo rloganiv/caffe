@@ -1,4 +1,4 @@
-DEVICE_ID = 2
+DEVICE_ID = 0
 
 """ Script to generate captions from video features"""
 

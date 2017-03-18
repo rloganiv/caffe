@@ -31,7 +31,7 @@ momentum: 0.9
 momentum2: 0.999
 weight_decay: 0.0002
 snapshot: 2000
-snapshot_prefix:"./snapshots/s2vt_glove/lm_deepfus_img512_s2vt_glove_72.7kvocab_sgd_lr2e3step7k"
+snapshot_prefix:"/home/ubuntu/data/weights/flickr_snapshots/03_11_"
 solver_mode: GPU
 random_seed: 1701
 average_loss: 100

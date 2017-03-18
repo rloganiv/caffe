@@ -9,8 +9,8 @@ max_iter: 110000
 momentum: 0.9
 weight_decay: 0.0000
 snapshot: 1000
-snapshot_prefix: "snapshots/snapshot"
-solver_mode: CPU
+snapshot_prefix: "/home/ubuntu/data/weights/lstm_2006/snapshot"
+solver_mode: GPU
 random_seed: 1701
 average_loss: 100
 clip_gradients: 10
